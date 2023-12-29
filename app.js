@@ -1,7 +1,7 @@
 const express= require('express')
 const app = express()
 const restaurantsData = require("./restaurant.json").results
-// const Restaurant = require("./restaurant")
+
 
 const port = 3000
 
@@ -10,13 +10,8 @@ const exphbs = require('express-handlebars')
 // set template engine
 app.engine('handlebars', exphbs({ defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
-
 app.get('/', (req, res) => {
-    Restaurant.find({})
-      .lean()
-      .then(restaurantsData => res.render('index', { restaurantsData }))
-      .catch(err => console.log(err))
-      
+    res.render('index', { restaurantsData })
 })
 
 // setting static files
@@ -40,7 +35,7 @@ app.get('/restaurants/new', (req, res) => {
 app.get('/search', (req,res) => {
     const keyword = req.query.keyword
     const filterrestaurants = restaurantsData.filter(data =>{
-        return data.name.includes(keyword)||data.category.includes(keyword)
+        return data.name.includes(keyword) || data.category.includes(keyword)
     })
     res.render('index', { restaurantsData:filterrestaurants,keyword:keyword })
 })
